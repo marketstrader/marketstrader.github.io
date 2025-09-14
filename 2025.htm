@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календар України 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #0057B8, #FFD700);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #0057B8, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .year-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #0057B8, #4A90E2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 87, 184, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 87, 184, 0.4);
+        }
+
+        .current-year {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0057B8;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .month {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .month:hover {
+            transform: translateY(-5px);
+            border-color: #FFD700;
+        }
+
+        .month-header {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0057B8;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(0, 87, 184, 0.1), rgba(255, 215, 0, 0.1));
+            border-radius: 10px;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 5px;
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: bold;
+            padding: 8px 4px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.8rem;
+            border-radius: 5px;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-height: 35px;
+        }
+
+        .day:hover {
+            transform: scale(1.1);
+        }
+
+        .day.other-month {
+            color: #ccc;
+        }
+
+        .day.today {
+            background: linear-gradient(45deg, #0057B8, #4A90E2);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 87, 184, 0.3);
+        }
+
+        .day.holiday {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .day.weekend {
+            background: rgba(255, 215, 0, 0.2);
+            color: #D2691E;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .holidays-list {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .holidays-list h3 {
+            color: #0057B8;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .holiday-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid #FFD700;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .legend {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🇺🇦 Календар України</h1>
+        </header>
+
+        <div class="year-nav">
+            <button class="nav-btn" onclick="changeYear(-1)">← 2024</button>
+            <div class="current-year" id="currentYear">2025</div>
+            <button class="nav-btn" onclick="changeYear(1)">2026 →</button>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(45deg, #0057B8, #4A90E2);"></div>
+                <span>Сьогодні</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(45deg, #FFD700, #FFA500);"></div>
+                <span>Державні свята</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: rgba(255, 215, 0, 0.2);"></div>
+                <span>Вихідні дні</span>
+            </div>
+        </div>
+
+        <div class="holidays-list">
+            <h3>Державні свята України 2025</h3>
+            <div id="holidaysList"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentYear = 2025;
+
+        const monthNames = [
+            'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
+            'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
+        ];
+
+        const weekdayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
+
+        // Державні свята України
+        const holidays = {
+            2025: {
+                '1-1': 'Новий рік',
+                '1-7': 'Різдво Христове (православне)',
+                '3-8': 'Міжнародний жіночий день',
+                '4-20': 'Великдень (православний)',
+                '4-21': 'Великодній понеділок',
+                '5-1': 'День праці',
+                '5-9': 'День перемоги над нацизмом',
+                '6-8': 'Трійця',
+                '6-28': 'День Конституції України',
+                '8-24': 'День незалежності України',
+                '10-14': 'День захисника України',
+                '12-25': 'Різдво Христове (католицьке)'
+            },
+            2024: {
+                '1-1': 'Новий рік',
+                '1-7': 'Різдво Христове (православне)',
+                '3-8': 'Міжнародний жіночий день',
+                '5-1': 'День праці',
+                '5-5': 'Великдень (православний)',
+                '5-6': 'Великодній понеділок',
+                '5-9': 'День перемоги над нацизмом',
+                '6-23': 'Трійця',
+                '6-28': 'День Конституції України',
+                '8-24': 'День незалежності України',
+                '10-14': 'День захисника України',
+                '12-25': 'Різдво Христове (католицьке)'
+            },
+            2026: {
+                '1-1': 'Новий рік',
+                '1-7': 'Різдво Христове (православне)',
+                '3-8': 'Міжнародний жіночий день',
+                '4-12': 'Великдень (православний)',
+                '4-13': 'Великодній понеділок',
+                '5-1': 'День праці',
+                '5-9': 'День перемоги над нацизмом',
+                '5-31': 'Трійця',
+                '6-28': 'День Конституції України',
+                '8-24': 'День незалежності України',
+                '10-14': 'День захисника України',
+                '12-25': 'Різдво Христове (католицьке)'
+            }
+        };
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        }
+
+        function isHoliday(date) {
+            const key = `${date.getMonth() + 1}-${date.getDate()}`;
+            return holidays[date.getFullYear()] && holidays[date.getFullYear()][key];
+        }
+
+        function isWeekend(date) {
+            return date.getDay() === 0 || date.getDay() === 6; // Sunday or Saturday
+        }
+
+        function getDaysInMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        function getFirstDayOfMonth(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            return firstDay === 0 ? 6 : firstDay - 1; // Convert to Monday = 0
+        }
+
+        function createMonth(year, month) {
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'month';
+
+            const header = document.createElement('div');
+            header.className = 'month-header';
+            header.textContent = monthNames[month];
+            monthDiv.appendChild(header);
+
+            const weekdays = document.createElement('div');
+            weekdays.className = 'weekdays';
+            weekdayNames.forEach(day => {
+                const weekday = document.createElement('div');
+                weekday.className = 'weekday';
+                weekday.textContent = day;
+                weekdays.appendChild(weekday);
+            });
+            monthDiv.appendChild(weekdays);
+
+            const days = document.createElement('div');
+            days.className = 'days';
+
+            const daysInMonth = getDaysInMonth(year, month);
+            const firstDay = getFirstDayOfMonth(year, month);
+            const daysInPrevMonth = getDaysInMonth(year, month - 1);
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                day.textContent = daysInPrevMonth - i;
+                days.appendChild(day);
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.textContent = day;
+
+                const date = new Date(year, month, day);
+                
+                if (isToday(date)) {
+                    dayDiv.classList.add('today');
+                } else if (isHoliday(date)) {
+                    dayDiv.classList.add('holiday');
+                    const holidayName = holidays[year][`${month + 1}-${day}`];
+                    dayDiv.title = holidayName;
+                } else if (isWeekend(date)) {
+                    dayDiv.classList.add('weekend');
+                }
+
+                days.appendChild(dayDiv);
+            }
+
+            // Next month days
+            const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+            const remainingCells = totalCells - (firstDay + daysInMonth);
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day other-month';
+                dayDiv.textContent = day;
+                days.appendChild(dayDiv);
+            }
+
+            monthDiv.appendChild(days);
+            return monthDiv;
+        }
+
+        function createCalendar(year) {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            for (let month = 0; month < 12; month++) {
+                grid.appendChild(createMonth(year, month));
+            }
+        }
+
+        function updateHolidaysList(year) {
+            const list = document.getElementById('holidaysList');
+            list.innerHTML = '';
+
+            if (holidays[year]) {
+                const yearHolidays = holidays[year];
+                const sortedHolidays = Object.entries(yearHolidays).sort((a, b) => {
+                    const [monthA, dayA] = a[0].split('-').map(Number);
+                    const [monthB, dayB] = b[0].split('-').map(Number);
+                    return monthA - monthB || dayA - dayB;
+                });
+
+                sortedHolidays.forEach(([date, name]) => {
+                    const [month, day] = date.split('-').map(Number);
+                    const item = document.createElement('div');
+                    item.className = 'holiday-item';
+                    item.innerHTML = `
+                        <span>${name}</span>
+                        <span>${day} ${monthNames[month - 1].toLowerCase()}</span>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+        }
+
+        function changeYear(direction) {
+            currentYear += direction;
+            document.getElementById('currentYear').textContent = currentYear;
+            createCalendar(currentYear);
+            updateHolidaysList(currentYear);
+        }
+
+        // Initialize calendar
+        createCalendar(currentYear);
+        updateHolidaysList(currentYear);
+    </script>
+</body>
+</html>
