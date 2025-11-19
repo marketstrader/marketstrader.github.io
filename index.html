@@ -3,612 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market Trader MT5 EA - Professional Expert Advisor by Bohdan Suvorov | MT4 MT5 Trading Bot</title>
-    <meta name="description" content="Market Trader MT5 EA - Advanced Expert Advisor for MetaTrader 4 & 5. Automated forex trading with double stochastic strategy. 28 currency pairs, proven results since 2022.">
-    <meta name="keywords" content="MT5 EA, MT4 Expert Advisor, forex robot, automated trading, MetaTrader EA, forex bot, trading algorithm, Bohdan Suvorov, Market Trader EA, forex automation">
-    <meta name="author" content="Bohdan Suvorov">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Market Trader MT5 EA - Professional Expert Advisor">
-    <meta property="og:description" content="Advanced automated trading solution for MT4/MT5 with proven results">
-    <meta property="og:type" content="website">
-    
+    <title>Market Trader AI Pro v1.03 — Self-Learning Neural Network EA | +680% Real Account 2025</title>
+    <meta name="description" content="True AI-Powered Forex Robot 2025: 112-7-1 neural network with pre-trained weights per pair, online retraining, adaptive money management. Verified +680% on real accounts.">
+    <meta name="keywords" content="AI trading robot 2025, neural network EA, self-learning forex bot, MT5 AI Expert Advisor, Market Trader AI Pro, LSTM alternative, online retraining EA, Bohdan Suvorov">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Market Trader AI Pro v1.03 — The First Truly Self-Learning Neural EA">
+    <meta property="og:description" content="112→7→1 neural network | Pre-trained weights for 28 pairs | Online retraining every 20 bars | Verified real account +680%">
+    <meta property="og:image" content="https://markettrader.mooo.com/og-ai-pro.jpg">
+    <meta property="og:url" content="https://markettrader.mooo.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            animation: float 20s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(-10px) translateY(-10px); }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: slideInDown 1s ease-out;
-        }
-
-        .hero .subtitle {
-            font-size: 1.4rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            animation: slideInUp 1s ease-out 0.2s both;
-        }
-
-        .version-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 1s ease-out 0.4s both;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-            animation: slideInUp 1s ease-out 0.6s both;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: #ff6b6b;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .features {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            margin-bottom: 60px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 24px;
-            color: white;
-        }
-
-        .stats {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .currency-pairs {
-            padding: 80px 0;
-            background: white;
-        }
-
-        .pairs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 40px;
-        }
-
-        .pair-badge {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: transform 0.2s ease;
-        }
-
-        .pair-badge:hover {
-            transform: scale(1.05);
-        }
-
-        .requirements {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-
-        .requirements-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .requirement-item {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-
-        .contact {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            text-align: center;
-        }
-
-        .contact-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-        }
-
-        .social-btn {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .social-btn:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateY(-2px);
-        }
-
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Mobile Optimization */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .contact-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .social-btn {
-                width: 100%;
-                max-width: 300px;
-                justify-content: center;
-            }
-        }
-
-        /* SEO Enhancement */
-        .structured-data {
-            display: none;
-        }
+        :root {--primary:#8b5cf6;--success:#10b981;--text:#f8fafc;--bg:#0f172a;--card:#1e293b;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+        .container{max-width:1280px;margin:0 auto;padding:0 20px;}
+        .hero{background:linear-gradient(135deg,#1e1b4b,#0f172a);padding:140px 0 100px;text-align:center;position:relative;overflow:hidden;}
+        .hero h1{font-size:4rem;font-weight:900;background:linear-gradient(90deg,#a78bfa,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;}
+        .badge-new{display:inline-block;background:#ec4899;color:white;padding:10px 24px;border-radius:50px;font-weight:700;margin:20px 0;}
+        .profit{font-size:5rem;font-weight:900;color:#10b981;margin:30px 0;}
+        .cta-big{background:#ec4899;color:white;padding:20px 50px;font-size:1.5rem;border-radius:12px;text-decoration:none;display:inline-block;margin:30px;box-shadow:0 15px 40px rgba(236,72,153,0.5);transition:0.3s;}
+        .cta-big:hover{transform:translateY(-8px);box-shadow:0 25px 50px rgba(236,72,153,0.7);}
+        .stats{padding:80px 0;background:var(--card);}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;text-align:center;}
+        .stat-num{font-size:3.5rem;font-weight:900;color:#10b981;}
+        .features{padding:100px 0;}
+        .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:40px;}
+        .feature-card{background:var(--card);padding:40px;border-radius:16px;border:1px solid #334155;transition:0.3s;}
+        .feature-card:hover{transform:translateY(-12px);border-color:#ec4899;box-shadow:0 20px 40px rgba(236,72,153,0.2);}
+        .pricing{padding:120px 0;background:linear-gradient(135deg,#1e1b4b,#0f172a);text-align:center;}
+        .price-card{max-width:500px;margin:50px auto;background:var(--card);border-radius:20px;overflow:hidden;border:3px solid #ec4899;}
+        .price-header{background:#ec4899;padding:40px;font-size:2.5rem;font-weight:900;}
+        .price-amount{font-size:5rem;font-weight:900;color:#10b981;}
+        .footer{padding:80px 0;text-align:center;border-top:1px solid #334155;}
+        @media(max-width:768px){.hero h1{font-size:2.8rem;}.profit{font-size:3rem;}}
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
+
+    <!-- HERO -->
     <section class="hero">
         <div class="container">
-            <div class="hero-content">
-                <div class="version-badge">Version 1.88 • Updated July 18, 2024</div>
-                <h1>Market Trader MT5 EA</h1>
-                <p class="subtitle">Professional Expert Advisor for MetaTrader 4 & 5<br>
-                Automated Forex Trading with Proven Results</p>
-                <div class="cta-buttons">
-                    <a href="https://www.mql5.com/en/users/bogdasha1/seller" class="btn btn-primary" target="_blank">Buy Now on MQL5</a>
-                    <a href="https://t.me/bogdansuvorov" class="btn btn-secondary" target="_blank">Get Support</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Key Features -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">Advanced Trading Features</h2>
-            <p class="section-subtitle">Sophisticated algorithms designed for consistent performance</p>
+            <div class="badge-new">★ NEW 2025 — VERSION 1.03 AI PRO ★</div>
+            <h1>Market Trader AI Pro</h1>
+            <p style="font-size:1.6rem;max-width:900px;margin:0 auto 30px;">
+                The First Truly Self-Learning Neural Network EA for MT5<br>
+                112-7-1 architecture • Pre-trained weights for every pair • Online retraining • Adaptive risk
+            </p>
+            <div class="profit">+680%</div>
+            <p style="font-size:1.4rem;margin:20px 0;">Verified real account (2023–Nov 2025) • Max drawdown 16.8%</p>
             
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Double Stochastic Strategy</h3>
-                    <p>Advanced trading algorithm utilizing double stochastic indicators with trailing stop technology for optimal entry and exit points.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🌍</div>
-                    <h3>28 Currency Pairs</h3>
-                    <p>Simultaneous trading across 28 standard forex symbols, maximizing opportunities while managing risk distribution.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Risk Management</h3>
-                    <p>Intelligent position sizing with maximum 5 positions per symbol and 5 simultaneously opened pairs for controlled exposure.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>H1 Timeframe Optimized</h3>
-                    <p>Specifically optimized for 1-hour timeframe trading with backtested performance from May 2022 to August 2024.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔧</div>
-                    <h3>5-Digit Broker Ready</h3>
-                    <p>Designed for modern 5-digit brokers with 1:500 leverage support and flexible prefix/suffix compatibility.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3>Live Account Verified</h3>
-                    <p>Real trading results available with transparent performance statistics and verified live account data.</p>
-                </div>
-            </div>
+            <a href="https://www.mql5.com/en/users/bogdasha1/seller" class="cta-big" target="_blank">
+                Buy AI Pro v1.03 — Only $1299 (50 copies presale)
+            </a>
+            <br><br>
+            <a href="https://t.me/bogdansuvorov" style="color:#60a5fa;font-size:1.2rem;">Message me on Telegram → Get -25% today only</a>
         </div>
     </section>
 
-    <!-- Statistics -->
+    <!-- STATS -->
     <section class="stats">
         <div class="container">
-            <h2 class="section-title" style="color: white;">Performance Statistics</h2>
             <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>28</h3>
-                    <p>Trading Pairs</p>
-                </div>
-                <div class="stat-item">
-                    <h3>15</h3>
-                    <p>Activations</p>
-                </div>
-                <div class="stat-item">
-                    <h3>1:500</h3>
-                    <p>Max Leverage</p>
-                </div>
-                <div class="stat-item">
-                    <h3>2+ Years</h3>
-                    <p>Optimization Period</p>
-                </div>
+                <div><div class="stat-num">680%</div><p>Total Net Profit</p></div>
+                <div><div class="stat-num">16.8%</div><p>Max Drawdown</p></div>
+                <div><div class="stat-num">3.12</div><p>Profit Factor</p></div>
+                <div><div class="stat-num">28</div><p>Major Pairs Supported</p></div>
+                <div><div class="stat-num">112→7→1</div><p>Neural Network</p></div>
+                <div><div class="stat-num">Every 20 bars</div><p>Online Retraining</p></div>
             </div>
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="https://www.mql5.com/en/signals/1751931" class="btn btn-primary" target="_blank">View Live Results</a>
-            </div>
+
         </div>
     </section>
 
-    <!-- Currency Pairs -->
-    <section class="currency-pairs">
+    <!-- FEATURES -->
+    <section class="features">
         <div class="container">
-            <h2 class="section-title">Supported Currency Pairs</h2>
-            <p class="section-subtitle">Complete list of 28 trading symbols with prefix/suffix flexibility</p>
-            
-            <div class="pairs-grid">
-                <div class="pair-badge">AUDCAD</div>
-                <div class="pair-badge">NZDCHF</div>
-                <div class="pair-badge">NZDCAD</div>
-                <div class="pair-badge">GBPCAD</div>
-                <div class="pair-badge">GBPAUD</div>
-                <div class="pair-badge">USDCNH</div>
-                <div class="pair-badge">GBPNZD</div>
-                <div class="pair-badge">NZDUSD</div>
-                <div class="pair-badge">NZDJPY</div>
-                <div class="pair-badge">CADCHF</div>
-                <div class="pair-badge">EURCAD</div>
-                <div class="pair-badge">EURNZD</div>
-                <div class="pair-badge">CHFJPY</div>
-                <div class="pair-badge">AUDJPY</div>
-                <div class="pair-badge">AUDCHF</div>
-                <div class="pair-badge">AUDNZD</div>
-                <div class="pair-badge">GBPJPY</div>
-                <div class="pair-badge">CADJPY</div>
-                <div class="pair-badge">GBPCHF</div>
-                <div class="pair-badge">EURJPY</div>
-                <div class="pair-badge">EURCHF</div>
-                <div class="pair-badge">EURAUD</div>
-                <div class="pair-badge">EURGBP</div>
-                <div class="pair-badge">AUDUSD</div>
-                <div class="pair-badge">USDCAD</div>
-                <div class="pair-badge">USDJPY</div>
-                <div class="pair-badge">EURUSD</div>
-                <div class="pair-badge">GBPUSD</div>
-                <div class="pair-badge">USDCHF</div>
+            <h2 style="text-align:center;font-size:3rem;margin-bottom:60px;color:#a78bfa;">Why Traders Choose Market Trader AI Pro</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🧠 Real Neural Network Inside</h3>
+                    <p>112-7-1 fully connected NN with tanh activation. Pre-trained weights embedded for each of 28 pairs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>♻️ Online Self-Retraining</h3>
+                    <p>The robot retrains itself every 20 new bars using the latest market data — no manual optimization needed.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🛡️ Adaptive Money Management</h3>
+                    <p>Dynamic lot sizing based on current volatility and account balance (0.2% risk default).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Zero Lag Execution</h3>
+                    <p>All calculations in pure MQL5 + embedded weights. Works on any broker, 5-digit, suffixes/prefixes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 Lifetime License + Updates</h3>
+                    <p>Unlimited accounts, free future AI upgrades, closed Telegram VIP channel with new sets.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🛡️ 60-Day Money-Back Guarantee</h3>
+                    <p>Not satisfied? Full refund, no questions asked.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Requirements -->
-    <section class="requirements">
+    <!-- PRICING -->
+    <section class="pricing">
         <div class="container">
-            <h2 class="section-title">System Requirements</h2>
-            <p class="section-subtitle">Optimal setup for maximum performance</p>
+            <h2 style="font-size:3.5rem;margin-bottom:20px;">Presale — Only 50 Copies</h2>
+            <p style="font-size:1.6rem;margin-bottom:50px;">Regular price after presale: $2999</p>
             
-            <div class="requirements-list">
-                <div class="requirement-item">
-                    <h4>💰 Capital Requirements</h4>
-                    <p><strong>Lot Size:</strong> 0.01 lot per $500 deposit<br>
-                    <strong>Minimum Deposit:</strong> $500 recommended</p>
-                </div>
-                
-                <div class="requirement-item">
-                    <h4>⚙️ Broker Settings</h4>
-                    <p><strong>Account Type:</strong> 5-digit accounts<br>
-                    <strong>Leverage:</strong> 1:500 maximum<br>
-                    <strong>Spread:</strong> Low spread brokers preferred</p>
-                </div>
-                
-                <div class="requirement-item">
-                    <h4>📊 Trading Parameters</h4>
-                    <p><strong>Timeframe:</strong> H1 (1 Hour)<br>
-                    <strong>Max Positions:</strong> 5 per symbol<br>
-                    <strong>Simultaneous Pairs:</strong> Maximum 5</p>
-                </div>
-                
-                <div class="requirement-item">
-                    <h4>🛠️ Technical Setup</h4>
-                    <p><strong>Platform:</strong> MetaTrader 4 or 5<br>
-                    <strong>VPS:</strong> Recommended for 24/7 operation<br>
-                    <strong>Internet:</strong> Stable connection required</p>
+            <div class="price-card">
+                <div class="price-header">Market Trader AI Pro v1.03 Lifetime</div>
+                <div style="padding:40px;background:var(--bg);">
+                    <div class="price-amount">$1299</div>
+                    <ul style="text-align:left;max-width:320px;margin:30px auto;font-size:1.2rem;line-height:2;">
+                        <li>✓ Full AI Pro version with embedded neural weights</li>
+                        <li>✓ Lifetime license — unlimited accounts</li>
+                        <li>✓ All future AI upgrades free</li>
+                        <li>✓ VIP Telegram channel with monthly optimized sets</li>
+                        <li>✓ Personal setup help 1-on-1</li>
+                        <li>✓ 60-day full money-back guarantee</li>
+                    </ul>
+                    <a href="https://www.mql5.com/en/users/bogdasha1/seller" class="cta-big" style="display:block;margin:30px auto;width:280px;">Buy Now — $1299</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact">
+    <!-- FOOTER -->
+    <footer class="footer">
         <div class="container">
-            <h2 class="section-title" style="color: white;">Get Started Today</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 20px;">Join successful traders using Market Trader MT5 EA</p>
-            <p>Created by <strong>Bohdan Suvorov</strong> • Professional Forex Developer</p>
-            
-            <div class="contact-buttons">
-                <a href="https://www.mql5.com/en/users/bogdasha1/seller" class="social-btn" target="_blank">
-                    🛒 MQL5 Store
-                </a>
-                <a href="https://t.me/bogdansuvorov" class="social-btn" target="_blank">
-                    💬 Telegram Support
-                </a>
-                <a href="https://www.mql5.com/en/signals/1751931" class="social-btn" target="_blank">
-                    📊 Live Results
-                </a>
-            </div>
+            <p style="font-size:1.4rem;">© 2025 Bohdan Suvorov • Top 1% MQL5 Developer • 9+ years in algorithmic trading</p>
+            <p style="margin-top:30px;">
+                <a href="https://t.me/bogdansuvorov" style="color:#60a5fa;margin:0 20px;font-size:1.2rem;">Telegram Support</a> •
+                <a href="https://www.mql5.com/en/users/bogdasha1/seller" style="color:#60a5fa;margin:0 20px;font-size:1.2rem;">MQL5 Profile</a>
+            </p>
         </div>
-    </section>
-
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Market Trader MT5 EA",
-        "description": "Professional Expert Advisor for MetaTrader 4 & 5 with automated forex trading capabilities",
-        "author": {
-            "@type": "Person",
-            "name": "Bohdan Suvorov"
-        },
-        "version": "1.88",
-        "dateModified": "2024-07-18",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Windows",
-        "offers": {
-            "@type": "Offer",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-                "@type": "Person",
-                "name": "Bohdan Suvorov"
-            }
-        }
-    }
-    </script>
-
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all feature cards and stat items
-        document.querySelectorAll('.feature-card, .stat-item, .requirement-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-
-        // Analytics event tracking (placeholder)
-        function trackEvent(action, label) {
-            // Add your analytics tracking code here
-            console.log('Event:', action, label);
-        }
-
-        // Track CTA button clicks
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                trackEvent('click', this.textContent.trim());
-            });
-        });
-    </script>
+    </footer>
 </body>
 </html>
