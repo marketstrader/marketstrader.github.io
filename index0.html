@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarketTrader EA — Algorithmic Forex Trading</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a0f;
+  --bg2: #0c1420;
+  --green: #00ff88;
+  --green2: #00cc6a;
+  --amber: #ffb800;
+  --red: #ff3d3d;
+  --text: #e8f0f8;
+  --muted: #5a7a8a;
+  --border: rgba(0,255,136,0.15);
+  --card: rgba(12,20,32,0.8);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* GRID BG */
+body::before {
+  content:'';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  background: rgba(6,10,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 3px;
+  color: var(--green);
+}
+
+.nav-links { display:flex; gap:32px; }
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); }
+
+.nav-cta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  padding: 10px 24px;
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--green); color: var(--bg); }
+
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 48px 80px;
+  z-index: 1;
+}
+
+.hero-glow {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content { max-width: 700px; }
+
+.hero-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-tag::before {
+  content: '';
+  display: inline-block;
+  width: 32px; height: 1px;
+  background: var(--green);
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+h1 span { color: var(--green); }
+
+.hero-sub {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: #8aa0b0;
+  max-width: 520px;
+  margin-bottom: 48px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  margin-bottom: 48px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  color: var(--green);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.stat-val.amber { color: var(--amber); }
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn-primary {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  padding: 16px 40px;
+  background: var(--green);
+  color: var(--bg);
+  border: none;
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--green2); transform: translateY(-1px); }
+
+.btn-secondary {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  padding: 16px 40px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--text); }
+
+/* TICKER */
+.ticker-wrap {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  overflow: hidden;
+  padding: 14px 0;
+}
+
+.ticker {
+  display: flex;
+  gap: 0;
+  animation: ticker 25s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.tick-item {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0 32px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-right: 1px solid var(--border);
+}
+
+.tick-sym { color: var(--muted); }
+.tick-pf { color: var(--green); font-weight: 600; }
+.tick-dd { color: var(--amber); }
+
+/* SECTION */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 100px 48px;
+}
+
+.sec-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.sec-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+/* RESULTS TABLE */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 48px;
+}
+
+.result-card {
+  background: var(--bg);
+  padding: 24px;
+  transition: background 0.2s;
+}
+.result-card:hover { background: var(--bg2); }
+
+.rc-pair {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.rc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+}
+
+.rc-key { color: var(--muted); letter-spacing: 1px; }
+.rc-val { font-weight: 600; }
+.rc-val.green { color: var(--green); }
+.rc-val.amber { color: var(--amber); }
+.rc-val.red { color: var(--red); }
+
+/* PRODUCTS */
+.products {
+  background: var(--bg2);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 48px;
+}
+
+.prod-card {
+  background: var(--bg);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.prod-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+.prod-card:hover::before { transform: scaleX(1); }
+.prod-card:hover { background: var(--bg2); }
+
+.prod-card.featured { background: rgba(0,255,136,0.04); }
+.prod-card.featured::before { transform: scaleX(1); background: var(--amber); }
+
+.prod-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--amber);
+  color: var(--bg);
+  display: inline-block;
+  margin-bottom: 16px;
+  width: fit-content;
+}
+
+.prod-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.prod-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+.prod-features {
+  list-style: none;
+  margin-bottom: 32px;
+}
+.prod-features li {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: #7090a0;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prod-features li::before {
+  content: '▸';
+  color: var(--green);
+  font-size: 0.6rem;
+}
+
+.prod-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  color: var(--green);
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.prod-price span {
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.prod-period {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+.btn-buy {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: block;
+}
+.btn-buy:hover { background: var(--green); color: var(--bg); }
+.btn-buy.featured-btn { background: var(--green); color: var(--bg); }
+.btn-buy.featured-btn:hover { background: var(--green2); }
+
+/* HOW IT WORKS */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0;
+  margin-top: 64px;
+  border: 1px solid var(--border);
+}
+
+.step {
+  padding: 40px 32px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: rgba(0,255,136,0.08);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.step-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+
+.step-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* CRYPTO */
+.crypto-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.crypto-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.crypto-badge span { color: var(--text); font-weight: 600; }
+
+/* FOOTER */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: gap;
+  background: var(--bg2);
+}
+
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  color: var(--green);
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+}
+.footer-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--green); }
+
+.footer-copy {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+/* PULSE DOT */
+.pulse {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-right: 8px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.8); }
+}
+
+/* FADE IN */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s forwards;
+}
+@keyframes fadeIn {
+  to { opacity:1; transform:translateY(0); }
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* WARNING STRIPE */
+.warning-bar {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255,184,0,0.08),
+    rgba(255,184,0,0.08) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  border: 1px solid rgba(255,184,0,0.2);
+  padding: 16px 24px;
+  margin-top: 48px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--amber);
+  letter-spacing: 1px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  section { padding: 60px 24px; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 24px; text-align: center; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .steps { grid-template-columns: 1fr; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">MarketTrader</div>
+  <div class="nav-links">
+    <a href="#results">Results</a>
+    <a href="#products">Products</a>
+    <a href="#how">How it works</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="https://t.me/markettraderopt_bot" class="nav-cta" target="_blank">Buy Now</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag fade-in"><span class="pulse"></span>Live since 2011 — 13 years running</div>
+    <h1 class="fade-in delay-1">ALGO<br>FOREX<br><span>TRADING</span></h1>
+    <p class="hero-sub fade-in delay-2">
+      Professional Expert Advisor for MT4/MT5. Multi-pair, Stochastic-based strategy.
+      29 currency pairs. Optimized per-symbol configurations. Real verified results.
+    </p>
+    <div class="hero-stats fade-in delay-3">
+      <div>
+        <div class="stat-val">29</div>
+        <div class="stat-label">Currency Pairs</div>
+      </div>
+      <div>
+        <div class="stat-val amber">52×</div>
+        <div class="stat-label">Best Profit Factor</div>
+      </div>
+      <div>
+        <div class="stat-val">&lt;15%</div>
+        <div class="stat-label">Max Drawdown</div>
+      </div>
+      <div>
+        <div class="stat-val">9.68</div>
+        <div class="stat-label">Best Sharpe</div>
+      </div>
+    </div>
+    <div class="hero-btns fade-in delay-4">
+      <a href="#products" class="btn-primary">Get the EA</a>
+      <a href="#results" class="btn-secondary">See Results</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <!-- first copy -->
+    <div class="tick-item"><span class="tick-sym">CHFJPY</span><span class="tick-pf">PF 52.57</span><span class="tick-dd">DD 13.1%</span></div>
+    <div class="tick-item"><span class="tick-sym">EURAUD</span><span class="tick-pf">PF 36.54</span><span class="tick-dd">DD 4.8%</span></div>
+    <div class="tick-item"><span class="tick-sym">EURUSD</span><span class="tick-pf">PF 45.81</span><span class="tick-dd">DD 7.7%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPCHF</span><span class="tick-pf">PF 61.43</span><span class="tick-dd">DD 3.0%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPAUD</span><span class="tick-pf">PF 38.81</span><span class="tick-dd">DD 12.8%</span></div>
+    <div class="tick-item"><span class="tick-sym">USDJPY</span><span class="tick-pf">PF 31.17</span><span class="tick-dd">DD 10.3%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPCAD</span><span class="tick-pf">PF 26.45</span><span class="tick-dd">DD 5.6%</span></div>
+    <div class="tick-item"><span class="tick-sym">NZDJPY</span><span class="tick-pf">PF 20.97</span><span class="tick-dd">DD 6.9%</span></div>
+    <div class="tick-item"><span class="tick-sym">USDCHF</span><span class="tick-pf">PF 41.58</span><span class="tick-dd">DD 4.2%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPJPY</span><span class="tick-pf">PF 32.58</span><span class="tick-dd">DD 5.2%</span></div>
+    <div class="tick-item"><span class="tick-sym">USDCAD</span><span class="tick-pf">PF 48.18</span><span class="tick-dd">DD 10.1%</span></div>
+    <div class="tick-item"><span class="tick-sym">EURGBP</span><span class="tick-pf">PF 40.85</span><span class="tick-dd">DD 0.9%</span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="tick-item"><span class="tick-sym">CHFJPY</span><span class="tick-pf">PF 52.57</span><span class="tick-dd">DD 13.1%</span></div>
+    <div class="tick-item"><span class="tick-sym">EURAUD</span><span class="tick-pf">PF 36.54</span><span class="tick-dd">DD 4.8%</span></div>
+    <div class="tick-item"><span class="tick-sym">EURUSD</span><span class="tick-pf">PF 45.81</span><span class="tick-dd">DD 7.7%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPCHF</span><span class="tick-pf">PF 61.43</span><span class="tick-dd">DD 3.0%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPAUD</span><span class="tick-pf">PF 38.81</span><span class="tick-dd">DD 12.8%</span></div>
+    <div class="tick-item"><span class="tick-sym">USDJPY</span><span class="tick-pf">PF 31.17</span><span class="tick-dd">DD 10.3%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPCAD</span><span class="tick-pf">PF 26.45</span><span class="tick-dd">DD 5.6%</span></div>
+    <div class="tick-item"><span class="tick-sym">NZDJPY</span><span class="tick-pf">PF 20.97</span><span class="tick-dd">DD 6.9%</span></div>
+    <div class="tick-item"><span class="tick-sym">USDCHF</span><span class="tick-pf">PF 41.58</span><span class="tick-dd">DD 4.2%</span></div>
+    <div class="tick-item"><span class="tick-sym">GBPJPY</span><span class="tick-pf">PF 32.58</span><span class="tick-dd">DD 5.2%</span></div>
+    <div class="tick-item"><span class="tick-sym">USDCAD</span><span class="tick-pf">PF 48.18</span><span class="tick-dd">DD 10.1%</span></div>
+    <div class="tick-item"><span class="tick-sym">EURGBP</span><span class="tick-pf">PF 40.85</span><span class="tick-dd">DD 0.9%</span></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="sec-label">Backtest Results — Jan 2025 / Mar 2026 — ICMarkets Raw</div>
+  <div class="sec-title">VERIFIED PERFORMANCE</div>
+  <p style="color:var(--muted);font-size:0.9rem;max-width:600px;line-height:1.7">
+    Strategy Tester results on ICMarkets SC-Demo. Deposit $1000, leverage 1:100.
+    H1 timeframe. Open prices only modelling. Per-symbol optimized parameters.
+  </p>
+
+  <div class="results-grid">
+    <div class="result-card">
+      <div class="rc-pair">CHFJPY</div>
+      <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$407</span></div>
+      <div class="rc-row"><span class="rc-key">PROFIT FACTOR</span><span class="rc-val green">52.57×</span></div>
+      <div class="rc-row"><span class="rc-key">SHARPE RATIO</span><span class="rc-val green">2.45</span></div>
+      <div class="rc-row"><span class="rc-key">DRAWDOWN</span><span class="rc-val amber">13.1%</span></div>
+      <div class="rc-row"><span class="rc-key">TOTAL TRADES</span><span class="rc-val">29</span></div>
+    </div>
+    <div class="result-card">
+      <div class="rc-pair">EURAUD</div>
+      <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$328</span></div>
+      <div class="rc-row"><span class="rc-key">PROFIT FACTOR</span><span class="rc-val green">36.54×</span></div>
+      <div class="rc-row"><span class="rc-key">SHARPE RATIO</span><span class="rc-val green">9.68</span></div>
+      <div class="rc-row"><span class="rc-key">DRAWDOWN</span><span class="rc-val amber">4.8%</span></div>
+      <div class="rc-row"><span class="rc-key">TOTAL TRADES</span><span class="rc-val">34</span></div>
+    </div>
+    <div class="result-card">
+      <div class="rc-pair">EURUSD</div>
+      <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$258</span></div>
+      <div class="rc-row"><span class="rc-key">PROFIT FACTOR</span><span class="rc-val green">45.81×</span></div>
+      <div class="rc-row"><span class="rc-key">SHARPE RATIO</span><span class="rc-val green">2.99</span></div>
+      <div class="rc-row"><span class="rc-key">DRAWDOWN</span><span class="rc-val amber">7.7%</span></div>
+      <div class="rc-row"><span class="rc-key">TOTAL TRADES</span><span class="rc-val">32</span></div>
+    </div>
+    <div class="result-card">
+      <div class="rc-pair">GBPCHF</div>
+      <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$212</span></div>
+      <div class="rc-row"><span class="rc-key">PROFIT FACTOR</span><span class="rc-val green">61.43×</span></div>
+      <div class="rc-row"><span class="rc-key">SHARPE RATIO</span><span class="rc-val green">7.50</span></div>
+      <div class="rc-row"><span class="rc-key">DRAWDOWN</span><span class="rc-val amber">3.0%</span></div>
+      <div class="rc-row"><span class="rc-key">TOTAL TRADES</span><span class="rc-val">25</span></div>
+    </div>
+    <div class="result-card">
+      <div class="rc-pair">USDCHF</div>
+      <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$147</span></div>
+      <div class="rc-row"><span class="rc-key">PROFIT FACTOR</span><span class="rc-val green">41.58×</span></div>
+      <div class="rc-row"><span class="rc-key">SHARPE RATIO</span><span class="rc-val green">7.10</span></div>
+      <div class="rc-row"><span class="rc-key">DRAWDOWN</span><span class="rc-val amber">4.2%</span></div>
+      <div class="rc-row"><span class="rc-key">TOTAL TRADES</span><span class="rc-val">26</span></div>
+    </div>
+    <div class="result-card">
+      <div class="rc-pair">GBPAUD</div>
+      <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$203</span></div>
+      <div class="rc-row"><span class="rc-key">PROFIT FACTOR</span><span class="rc-val green">38.81×</span></div>
+      <div class="rc-row"><span class="rc-key">SHARPE RATIO</span><span class="rc-val green">1.69</span></div>
+      <div class="rc-row"><span class="rc-key">DRAWDOWN</span><span class="rc-val amber">12.8%</span></div>
+      <div class="rc-row"><span class="rc-key">TOTAL TRADES</span><span class="rc-val">21</span></div>
+    </div>
+  </div>
+
+  <div class="warning-bar">
+    ⚠ RISK DISCLOSURE — Trading forex involves significant risk of loss. Past performance does not guarantee future results.
+    Backtest results are simulated and may not reflect live trading conditions. Trade responsibly.
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="products">
+  <div class="sec-label">Pricing</div>
+  <div class="sec-title">GET MARKETTRADER EA</div>
+  <p style="color:var(--muted);font-size:0.9rem;line-height:1.7">
+    Purchase via Telegram bot. Instant delivery after crypto payment. No MQL5 middleman.
+  </p>
+
+  <div class="products-grid">
+
+    <div class="prod-card">
+      <div class="prod-name">EA v1.0</div>
+      <div class="prod-desc">Single-pair version. Full source code in MQL5. Works on MT5. Ideal for learning the strategy.</div>
+      <ul class="prod-features">
+        <li>MarketTrader-EAv1.0.ex5 compiled</li>
+        <li>MarketTrader-EAv1.0.mq5 source</li>
+        <li>Setup guide PDF</li>
+        <li>1 currency pair config</li>
+      </ul>
+      <div class="prod-price">$<span style="font-size:3rem">99</span></div>
+      <div class="prod-period">One-time payment · Lifetime use</div>
+      <a href="https://t.me/markettraderopt_bot?start=buy_ea_single" class="btn-buy" target="_blank">Buy via Telegram</a>
+    </div>
+
+    <div class="prod-card featured">
+      <div class="prod-badge">Most Popular</div>
+      <div class="prod-name">EA v1.0 Full</div>
+      <div class="prod-desc">All 29 currency pairs with pre-optimized configs. Ready to run on any MT5 account.</div>
+      <ul class="prod-features">
+        <li>All 29 pairs optimized configs</li>
+        <li>Full MQL5 source code</li>
+        <li>Backtest reports included</li>
+        <li>Setup guide + video walkthrough</li>
+        <li>3 months Telegram support</li>
+      </ul>
+      <div class="prod-price">$<span style="font-size:3rem">299</span></div>
+      <div class="prod-period">One-time payment · Lifetime use</div>
+      <a href="https://t.me/markettraderopt_bot?start=buy_ea_full" class="btn-buy featured-btn" target="_blank">Buy via Telegram</a>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-name">EA + AI Version</div>
+      <div class="prod-desc">MarketTrader-AI_EA — next generation with ML-enhanced signal filtering. Experimental.</div>
+      <ul class="prod-features">
+        <li>AI-enhanced entry signals</li>
+        <li>Multi-timeframe analysis</li>
+        <li>Full source MQL5</li>
+        <li>6 months priority support</li>
+        <li>Free updates for 1 year</li>
+      </ul>
+      <div class="prod-price">$<span style="font-size:3rem">599</span></div>
+      <div class="prod-period">One-time payment · Lifetime use</div>
+      <a href="https://t.me/markettraderopt_bot?start=buy_ea_ai" class="btn-buy" target="_blank">Buy via Telegram</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="sec-label">Process</div>
+  <div class="sec-title">HOW IT WORKS</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Open Telegram Bot</div>
+      <div class="step-text">Click any "Buy" button. Our Telegram bot handles the entire purchase flow — no account needed.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Pay with Crypto</div>
+      <div class="step-text">BTC, ETH, USDT accepted via NowPayments. Secure checkout. Instant confirmation.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Instant Delivery</div>
+      <div class="step-text">Files delivered directly to your Telegram chat within seconds of payment confirmation.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">Install & Run</div>
+      <div class="step-text">Drop the .ex5 into MT5 Experts folder. Set inputs per the guide. Attach to chart. Done.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px">
+    <div class="sec-label">Accepted Payments</div>
+    <div class="crypto-row">
+      <div class="crypto-badge">₿ <span>Bitcoin</span></div>
+      <div class="crypto-badge">Ξ <span>Ethereum</span></div>
+      <div class="crypto-badge">₮ <span>USDT TRC20</span></div>
+      <div class="crypto-badge">◎ <span>USDT ERC20</span></div>
+      <div class="crypto-badge">◈ <span>LTC</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background:var(--bg2)">
+  <div class="sec-label">Support</div>
+  <div class="sec-title">CONTACT</div>
+  <p style="color:var(--muted);font-size:0.9rem;line-height:1.7;max-width:500px;margin-bottom:32px">
+    13+ years developing algorithmic trading systems. Questions about setup, strategy, or custom work — reach out directly.
+  </p>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <a href="https://t.me/bogdansuvorov" class="btn-primary" target="_blank">Telegram @bogdansuvorov</a>
+    <a href="https://markettrader.mooo.com" class="btn-secondary" target="_blank">MQL5 Profile</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">MarketTrader EA</div>
+  <div class="footer-links">
+    <a href="#results">Results</a>
+    <a href="#products">Products</a>
+    <a href="#how">How it works</a>
+  </div>
+  <div class="footer-copy">© 2011–2025 Bogdan Suvorov · Ukraine</div>
+</footer>
+
+</body>
+</html>

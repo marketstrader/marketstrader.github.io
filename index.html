@@ -3,655 +3,566 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MarketTrader EA — Algorithmic Forex Trading</title>
+<title>Bohdan Suvorov — Algorithmic Forex Trading EAs</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #060a0f;
-  --bg2: #0c1420;
-  --green: #00ff88;
-  --green2: #00cc6a;
-  --amber: #ffb800;
-  --red: #ff3d3d;
-  --text: #e8f0f8;
-  --muted: #5a7a8a;
-  --border: rgba(0,255,136,0.15);
-  --card: rgba(12,20,32,0.8);
+  --bg:      #060a0f;
+  --bg2:     #0c1420;
+  --bg3:     #0a1018;
+  --green:   #00ff88;
+  --green2:  #00cc6a;
+  --amber:   #ffb800;
+  --red:     #ff3d3d;
+  --blue:    #4f9fff;
+  --text:    #e8f0f8;
+  --muted:   #5a7a8a;
+  --border:  rgba(0,255,136,0.13);
+  --border2: rgba(0,255,136,0.06);
+  --card:    rgba(12,20,32,0.85);
+  --glow:    rgba(0,255,136,0.06);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'IBM Plex Sans', sans-serif;
-  overflow-x: hidden;
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* GRID BG */
-body::before {
+/* ─── GRID OVERLAY ─── */
+body::before{
   content:'';
-  position: fixed;
-  inset: 0;
+  position:fixed;inset:0;
   background-image:
-    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
+    linear-gradient(rgba(0,255,136,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,136,0.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;z-index:0;
 }
 
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 48px;
-  background: rgba(6,10,15,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+/* ─── NOISE GRAIN ─── */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.6;
 }
 
-.nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem;
-  letter-spacing: 3px;
-  color: var(--green);
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 56px;
+  background:rgba(6,10,15,0.9);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  transition:padding 0.3s;
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.55rem;letter-spacing:4px;color:var(--green);
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:36px;align-items:center;}
+.nav-links a{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.68rem;color:var(--muted);
+  text-decoration:none;letter-spacing:2px;text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--green);}
+.nav-cta{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  padding:10px 26px;background:transparent;
+  border:1px solid var(--green);color:var(--green);
+  cursor:pointer;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;transition:all 0.2s;
+}
+.nav-cta:hover{background:var(--green);color:var(--bg);}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;
+  padding:140px 56px 100px;z-index:1;
+}
+.hero-glow{
+  position:absolute;top:15%;left:5%;
+  width:720px;height:720px;
+  background:radial-gradient(circle,rgba(0,255,136,0.055) 0%,transparent 68%);
+  pointer-events:none;
+}
+.hero-glow2{
+  position:absolute;top:50%;right:0%;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(79,159,255,0.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{max-width:740px;}
+.hero-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  letter-spacing:4px;color:var(--green);text-transform:uppercase;
+  margin-bottom:28px;display:flex;align-items:center;gap:12px;
+}
+.hero-tag::before{
+  content:'';display:inline-block;
+  width:36px;height:1px;background:var(--green);
 }
 
-.nav-links { display:flex; gap:32px; }
-.nav-links a {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  transition: color 0.2s;
+h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4.5rem,9vw,8rem);
+  line-height:0.9;letter-spacing:2px;margin-bottom:36px;
 }
-.nav-links a:hover { color: var(--green); }
+h1 span{color:var(--green);}
+h1 .dim{color:rgba(232,240,248,0.25);}
 
-.nav-cta {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  padding: 10px 24px;
-  background: transparent;
-  border: 1px solid var(--green);
-  color: var(--green);
-  cursor: pointer;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-.nav-cta:hover { background: var(--green); color: var(--bg); }
-
-/* HERO */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 120px 48px 80px;
-  z-index: 1;
+.hero-sub{
+  font-size:1.05rem;font-weight:300;line-height:1.75;
+  color:#8aa0b0;max-width:520px;margin-bottom:52px;
 }
 
-.hero-glow {
-  position: absolute;
-  top: 20%;
-  left: 10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
-  pointer-events: none;
+.hero-stats{
+  display:flex;gap:48px;margin-bottom:52px;
+  padding:28px 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat{display:flex;flex-direction:column;gap:6px;}
+.stat-val{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.6rem;color:var(--green);
+  letter-spacing:1px;line-height:1;
+}
+.stat-val.amber{color:var(--amber);}
+.stat-val.blue{color:var(--blue);}
+.stat-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  color:var(--muted);letter-spacing:2px;text-transform:uppercase;
 }
 
-.hero-content { max-width: 700px; }
-
-.hero-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 4px;
-  color: var(--green);
-  text-transform: uppercase;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;}
+.btn-primary{
+  font-family:'IBM Plex Mono',monospace;font-size:0.75rem;
+  padding:16px 44px;background:var(--green);
+  color:var(--bg);border:none;cursor:pointer;
+  letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;font-weight:600;
+  transition:all 0.22s;display:inline-block;
 }
-.hero-tag::before {
-  content: '';
-  display: inline-block;
-  width: 32px; height: 1px;
-  background: var(--green);
+.btn-primary:hover{background:var(--green2);transform:translateY(-2px);}
+.btn-secondary{
+  font-family:'IBM Plex Mono',monospace;font-size:0.75rem;
+  padding:16px 44px;background:transparent;color:var(--text);
+  border:1px solid rgba(255,255,255,0.18);cursor:pointer;
+  letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;transition:all 0.22s;display:inline-block;
 }
+.btn-secondary:hover{border-color:var(--text);}
 
-h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4rem, 8vw, 7rem);
-  line-height: 0.92;
-  letter-spacing: 2px;
-  margin-bottom: 32px;
+/* ─── TICKER ─── */
+.ticker-wrap{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);overflow:hidden;padding:15px 0;
 }
-
-h1 span { color: var(--green); }
-
-.hero-sub {
-  font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1.7;
-  color: #8aa0b0;
-  max-width: 520px;
-  margin-bottom: 48px;
+.ticker-inner{
+  display:flex;gap:0;
+  animation:ticker 30s linear infinite;
+  white-space:nowrap;
 }
-
-.hero-stats {
-  display: flex;
-  gap: 48px;
-  margin-bottom: 48px;
-  padding: 24px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+@keyframes ticker{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
 }
-
-.stat-val {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.4rem;
-  color: var(--green);
-  letter-spacing: 1px;
-  line-height: 1;
+.tick-item{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  padding:0 32px;letter-spacing:1px;
+  display:flex;align-items:center;gap:10px;
+  border-right:1px solid var(--border);
 }
-.stat-val.amber { color: var(--amber); }
-.stat-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-top: 4px;
+.tick-sym{color:var(--muted);}
+.tick-pf{color:var(--green);font-weight:600;}
+.tick-dd{color:var(--amber);}
+
+/* ─── SECTION BASE ─── */
+section{position:relative;z-index:1;padding:112px 56px;}
+.sec-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:5px;color:var(--green);
+  text-transform:uppercase;margin-bottom:16px;
+}
+.sec-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,5vw,4.5rem);
+  letter-spacing:2px;margin-bottom:20px;line-height:0.95;
+}
+.sec-sub{
+  color:var(--muted);font-size:0.9rem;
+  max-width:580px;line-height:1.75;
+  margin-bottom:56px;
 }
 
-.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
-
-.btn-primary {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
-  padding: 16px 40px;
-  background: var(--green);
-  color: var(--bg);
-  border: none;
-  cursor: pointer;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s;
-  display: inline-block;
+/* ─── EAs (PRODUCTS) ─── */
+#eas{background:var(--bg2);}
+.eas-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:2px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:56px;
 }
-.btn-primary:hover { background: var(--green2); transform: translateY(-1px); }
-
-.btn-secondary {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
-  padding: 16px 40px;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid rgba(255,255,255,0.2);
-  cursor: pointer;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all 0.2s;
-  display: inline-block;
+.ea-card{
+  background:var(--bg);padding:36px;
+  display:flex;flex-direction:column;gap:0;
+  transition:background 0.22s;position:relative;overflow:hidden;
 }
-.btn-secondary:hover { border-color: var(--text); }
+.ea-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--blue));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.35s;
+}
+.ea-card:hover::before{transform:scaleX(1);}
+.ea-card:hover{background:var(--bg3);}
+.ea-card.featured{background:rgba(0,255,136,0.03);}
+.ea-card.featured::before{transform:scaleX(1);background:linear-gradient(90deg,var(--amber),var(--green));}
 
-/* TICKER */
-.ticker-wrap {
-  position: relative;
-  z-index: 1;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
-  overflow: hidden;
-  padding: 14px 0;
+.ea-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;
+  letter-spacing:3px;text-transform:uppercase;
+  padding:4px 10px;background:var(--amber);color:var(--bg);
+  display:inline-block;margin-bottom:20px;width:fit-content;font-weight:600;
+}
+.ea-badge.new{background:var(--blue);}
+
+.ea-img{
+  width:64px;height:64px;border-radius:4px;
+  margin-bottom:20px;border:1px solid var(--border);
+  background:var(--bg2);object-fit:cover;
 }
 
-.ticker {
-  display: flex;
-  gap: 0;
-  animation: ticker 25s linear infinite;
-  white-space: nowrap;
+.ea-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.75rem;letter-spacing:2px;margin-bottom:10px;
+  color:var(--text);
 }
 
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.ea-desc{
+  font-size:0.83rem;color:var(--muted);
+  line-height:1.65;margin-bottom:24px;flex:1;
 }
 
-.tick-item {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  padding: 0 32px;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-right: 1px solid var(--border);
+.ea-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.ea-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  letter-spacing:1px;padding:4px 10px;
+  border:1px solid var(--border);color:var(--muted);
+}
+.ea-tag.green{border-color:rgba(0,255,136,0.3);color:var(--green);}
+
+.ea-price-row{
+  display:flex;align-items:flex-end;
+  justify-content:space-between;margin-bottom:20px;
+}
+.ea-price{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.4rem;color:var(--green);letter-spacing:1px;line-height:1;
+}
+.ea-price .cur{font-size:1.1rem;color:var(--muted);}
+.ea-price-note{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  color:var(--muted);letter-spacing:1px;text-align:right;line-height:1.5;
+}
+.ea-price-note strong{color:var(--amber);}
+
+.btn-mql5{
+  font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+  padding:14px;background:transparent;
+  border:1px solid var(--green);color:var(--green);
+  cursor:pointer;letter-spacing:2px;text-transform:uppercase;
+  text-align:center;text-decoration:none;
+  transition:all 0.22s;display:block;
+}
+.btn-mql5:hover{background:var(--green);color:var(--bg);}
+.btn-mql5.featured-btn{background:var(--green);color:var(--bg);}
+.btn-mql5.featured-btn:hover{background:var(--green2);}
+
+/* ─── RESULTS ─── */
+#results{}
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:0;
+}
+.result-card{background:var(--bg);padding:28px;transition:background 0.2s;}
+.result-card:hover{background:var(--bg2);}
+.rc-pair{
+  font-family:'Bebas Neue',sans-serif;font-size:1.45rem;
+  letter-spacing:2px;margin-bottom:18px;color:var(--text);
+}
+.rc-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+}
+.rc-key{color:var(--muted);letter-spacing:1px;}
+.rc-val{font-weight:600;}
+.rc-val.green{color:var(--green);}
+.rc-val.amber{color:var(--amber);}
+
+/* ─── FEATURES ─── */
+#features{background:var(--bg2);}
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:56px;
+}
+.feat-card{
+  background:var(--bg);padding:40px 32px;
+  transition:background 0.22s;
+}
+.feat-card:hover{background:var(--bg3);}
+.feat-icon{
+  font-size:1.8rem;margin-bottom:24px;
+  display:block;
+}
+.feat-title{
+  font-family:'IBM Plex Mono',monospace;font-size:0.75rem;
+  font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);margin-bottom:12px;
+}
+.feat-text{font-size:0.85rem;color:var(--muted);line-height:1.65;}
+
+/* ─── HOW IT WORKS ─── */
+.steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:0;margin-top:72px;
+  border:1px solid var(--border);
+}
+.step{
+  padding:44px 36px;border-right:1px solid var(--border);
+  position:relative;
+}
+.step:last-child{border-right:none;}
+.step-num{
+  font-family:'Bebas Neue',sans-serif;font-size:5.5rem;
+  color:rgba(0,255,136,0.07);line-height:1;margin-bottom:16px;
+}
+.step-title{
+  font-family:'IBM Plex Mono',monospace;font-size:0.75rem;
+  font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);margin-bottom:12px;
+}
+.step-text{font-size:0.85rem;color:var(--muted);line-height:1.65;}
+
+/* ─── CRYPTO ─── */
+.crypto-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px;}
+.crypto-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  padding:10px 20px;border:1px solid var(--border);
+  color:var(--muted);letter-spacing:2px;
+  display:flex;align-items:center;gap:8px;
+}
+.crypto-badge span{color:var(--text);font-weight:600;}
+
+/* ─── TELEGRAM BAND ─── */
+.tg-band{
+  position:relative;z-index:1;
+  background:linear-gradient(135deg,rgba(0,255,136,0.06) 0%,rgba(79,159,255,0.06) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:64px 56px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:32px;
+}
+.tg-band-text h2{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.2rem);
+  letter-spacing:2px;margin-bottom:10px;
+}
+.tg-band-text p{font-size:0.9rem;color:var(--muted);line-height:1.6;}
+.tg-band-btns{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+
+/* ─── CONTACT ─── */
+#contact{background:var(--bg2);}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);margin-top:56px;
+}
+.contact-block{background:var(--bg);padding:40px;}
+.contact-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:4px;color:var(--muted);text-transform:uppercase;
+  margin-bottom:12px;
+}
+.contact-val{
+  font-family:'Bebas Neue',sans-serif;font-size:1.6rem;
+  letter-spacing:2px;color:var(--text);margin-bottom:16px;
+}
+.contact-val a{color:var(--green);text-decoration:none;}
+.contact-val a:hover{text-decoration:underline;}
+.contact-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+
+/* ─── WARNING BAR ─── */
+.warning-bar{
+  background:repeating-linear-gradient(
+    -45deg,rgba(255,184,0,0.07),rgba(255,184,0,0.07) 10px,
+    transparent 10px,transparent 20px);
+  border:1px solid rgba(255,184,0,0.2);
+  padding:16px 24px;margin-top:56px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  color:var(--amber);letter-spacing:1px;line-height:1.65;
 }
 
-.tick-sym { color: var(--muted); }
-.tick-pf { color: var(--green); font-weight: 600; }
-.tick-dd { color: var(--amber); }
-
-/* SECTION */
-section {
-  position: relative;
-  z-index: 1;
-  padding: 100px 48px;
+/* ─── FOOTER ─── */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:52px 56px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:24px;background:var(--bg2);
+}
+.footer-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  letter-spacing:3px;color:var(--green);
+}
+.footer-links{display:flex;gap:32px;}
+.footer-links a{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  color:var(--muted);text-decoration:none;letter-spacing:2px;
+  text-transform:uppercase;transition:color 0.2s;
+}
+.footer-links a:hover{color:var(--green);}
+.footer-copy{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  color:var(--muted);letter-spacing:1px;
 }
 
-.sec-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 4px;
-  color: var(--green);
-  text-transform: uppercase;
-  margin-bottom: 16px;
+/* ─── PULSE ─── */
+.pulse{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--green);margin-right:8px;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.35;transform:scale(0.75);}
 }
 
-.sec-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
+/* ─── FADE IN ─── */
+.fade-in{
+  opacity:0;transform:translateY(24px);
+  animation:fadeIn 0.9s forwards;
+}
+@keyframes fadeIn{to{opacity:1;transform:translateY(0);}}
+.d1{animation-delay:0.1s;}
+.d2{animation-delay:0.22s;}
+.d3{animation-delay:0.36s;}
+.d4{animation-delay:0.5s;}
+
+/* ─── SCROLL REVEAL ─── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s,transform 0.7s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ─── SECTION DIVIDER ─── */
+.divider{
+  position:relative;z-index:1;
+  height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);
+  opacity:0.2;
 }
 
-/* RESULTS TABLE */
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin-top: 48px;
+/* ─── PROP FIRM TAG ─── */
+.prop-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:3px 10px;
+  border:1px solid rgba(79,159,255,0.4);color:var(--blue);
+  margin-bottom:16px;
 }
 
-.result-card {
-  background: var(--bg);
-  padding: 24px;
-  transition: background 0.2s;
-}
-.result-card:hover { background: var(--bg2); }
-
-.rc-pair {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.4rem;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-  color: var(--text);
-}
-
-.rc-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-}
-
-.rc-key { color: var(--muted); letter-spacing: 1px; }
-.rc-val { font-weight: 600; }
-.rc-val.green { color: var(--green); }
-.rc-val.amber { color: var(--amber); }
-.rc-val.red { color: var(--red); }
-
-/* PRODUCTS */
-.products {
-  background: var(--bg2);
-}
-
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin-top: 48px;
-}
-
-.prod-card {
-  background: var(--bg);
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  transition: background 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.prod-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--green);
-  transform: scaleX(0);
-  transition: transform 0.3s;
-}
-.prod-card:hover::before { transform: scaleX(1); }
-.prod-card:hover { background: var(--bg2); }
-
-.prod-card.featured { background: rgba(0,255,136,0.04); }
-.prod-card.featured::before { transform: scaleX(1); background: var(--amber); }
-
-.prod-badge {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  background: var(--amber);
-  color: var(--bg);
-  display: inline-block;
-  margin-bottom: 16px;
-  width: fit-content;
-}
-
-.prod-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-}
-
-.prod-desc {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.6;
-  flex: 1;
-  margin-bottom: 24px;
-}
-
-.prod-features {
-  list-style: none;
-  margin-bottom: 32px;
-}
-.prod-features li {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  color: #7090a0;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.prod-features li::before {
-  content: '▸';
-  color: var(--green);
-  font-size: 0.6rem;
-}
-
-.prod-price {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 3rem;
-  color: var(--green);
-  letter-spacing: 1px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.prod-price span {
-  font-size: 1.2rem;
-  color: var(--muted);
-}
-
-.prod-period {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  margin-bottom: 24px;
-  letter-spacing: 1px;
-}
-
-.btn-buy {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  padding: 14px;
-  background: transparent;
-  border: 1px solid var(--green);
-  color: var(--green);
-  cursor: pointer;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.2s;
-  display: block;
-}
-.btn-buy:hover { background: var(--green); color: var(--bg); }
-.btn-buy.featured-btn { background: var(--green); color: var(--bg); }
-.btn-buy.featured-btn:hover { background: var(--green2); }
-
-/* HOW IT WORKS */
-.steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0;
-  margin-top: 64px;
-  border: 1px solid var(--border);
-}
-
-.step {
-  padding: 40px 32px;
-  border-right: 1px solid var(--border);
-  position: relative;
-}
-.step:last-child { border-right: none; }
-
-.step-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 5rem;
-  color: rgba(0,255,136,0.08);
-  line-height: 1;
-  margin-bottom: 16px;
-}
-
-.step-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--green);
-  margin-bottom: 12px;
-}
-
-.step-text {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* CRYPTO */
-.crypto-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 32px;
-}
-
-.crypto-badge {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  padding: 10px 20px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.crypto-badge span { color: var(--text); font-weight: 600; }
-
-/* FOOTER */
-footer {
-  position: relative;
-  z-index: 1;
-  border-top: 1px solid var(--border);
-  padding: 48px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: gap;
-  background: var(--bg2);
-}
-
-.footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.4rem;
-  letter-spacing: 3px;
-  color: var(--green);
-}
-
-.footer-links {
-  display: flex;
-  gap: 32px;
-}
-.footer-links a {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--green); }
-
-.footer-copy {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 1px;
-}
-
-/* PULSE DOT */
-.pulse {
-  display: inline-block;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-  margin-right: 8px;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50% { opacity:0.4; transform:scale(0.8); }
-}
-
-/* FADE IN */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 0.8s forwards;
-}
-@keyframes fadeIn {
-  to { opacity:1; transform:translateY(0); }
-}
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
-.delay-4 { animation-delay: 0.4s; }
-
-/* WARNING STRIPE */
-.warning-bar {
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,184,0,0.08),
-    rgba(255,184,0,0.08) 10px,
-    transparent 10px,
-    transparent 20px
-  );
-  border: 1px solid rgba(255,184,0,0.2);
-  padding: 16px 24px;
-  margin-top: 48px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--amber);
-  letter-spacing: 1px;
-  line-height: 1.6;
-}
-
-@media (max-width: 768px) {
-  nav { padding: 16px 24px; }
-  .nav-links { display: none; }
-  .hero { padding: 100px 24px 60px; }
-  section { padding: 60px 24px; }
-  footer { padding: 32px 24px; flex-direction: column; gap: 24px; text-align: center; }
-  .hero-stats { gap: 24px; flex-wrap: wrap; }
-  .steps { grid-template-columns: 1fr; }
-  .step { border-right: none; border-bottom: 1px solid var(--border); }
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  .hero{padding:110px 20px 70px;}
+  section{padding:64px 20px;}
+  .tg-band{padding:48px 20px;}
+  footer{padding:36px 20px;flex-direction:column;text-align:center;}
+  .footer-links{flex-direction:column;gap:16px;align-items:center;}
+  .hero-stats{gap:28px;flex-wrap:wrap;}
+  .steps{grid-template-columns:1fr;}
+  .step{border-right:none;border-bottom:1px solid var(--border);}
+  .contact-grid{grid-template-columns:1fr;}
+  .eas-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 
+<!-- ═══ NAV ═══ -->
 <nav>
-  <div class="nav-logo">MarketTrader</div>
+  <a href="#" class="nav-logo">MarketTrader</a>
   <div class="nav-links">
+    <a href="#eas">Expert Advisors</a>
     <a href="#results">Results</a>
-    <a href="#products">Products</a>
-    <a href="#how">How it works</a>
+    <a href="#how">How it Works</a>
     <a href="#contact">Contact</a>
   </div>
-  <a href="https://t.me/markettraderopt_bot" class="nav-cta" target="_blank">Buy Now</a>
+  <a href="https://www.mql5.com/en/users/bogdasha1/seller" class="nav-cta" target="_blank">MQL5 Store</a>
 </nav>
 
+<!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
   <div class="hero-content">
-    <div class="hero-tag fade-in"><span class="pulse"></span>Live since 2011 — 13 years running</div>
-    <h1 class="fade-in delay-1">ALGO<br>FOREX<br><span>TRADING</span></h1>
-    <p class="hero-sub fade-in delay-2">
-      Professional Expert Advisor for MT4/MT5. Multi-pair, Stochastic-based strategy.
-      29 currency pairs. Optimized per-symbol configurations. Real verified results.
+    <div class="hero-tag fade-in"><span class="pulse"></span>Bohdan Suvorov · Active since 2011</div>
+    <h1 class="fade-in d1">ALGO<br>FOREX<br><span>TRADING</span></h1>
+    <p class="hero-sub fade-in d2">
+      Professional Expert Advisors for MetaTrader 5. Multi-pair, stochastic &amp; AI-driven strategies.
+      Prop Firm ready. Verified backtest results. 29–30 currency pairs per EA.
     </p>
-    <div class="hero-stats fade-in delay-3">
-      <div>
-        <div class="stat-val">29</div>
+    <div class="hero-stats fade-in d3">
+      <div class="stat">
+        <div class="stat-val">4</div>
+        <div class="stat-label">Expert Advisors</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val amber">30</div>
         <div class="stat-label">Currency Pairs</div>
       </div>
-      <div>
-        <div class="stat-val amber">52×</div>
+      <div class="stat">
+        <div class="stat-val">52×</div>
         <div class="stat-label">Best Profit Factor</div>
       </div>
-      <div>
-        <div class="stat-val">&lt;15%</div>
-        <div class="stat-label">Max Drawdown</div>
-      </div>
-      <div>
-        <div class="stat-val">9.68</div>
-        <div class="stat-label">Best Sharpe</div>
+      <div class="stat">
+        <div class="stat-val blue">LSTM</div>
+        <div class="stat-label">AI Neural Net</div>
       </div>
     </div>
-    <div class="hero-btns fade-in delay-4">
-      <a href="#products" class="btn-primary">Get the EA</a>
+    <div class="hero-btns fade-in d4">
+      <a href="#eas" class="btn-primary">Explore EAs</a>
       <a href="#results" class="btn-secondary">See Results</a>
     </div>
   </div>
 </section>
 
-<!-- TICKER -->
+<!-- ═══ TICKER ═══ -->
 <div class="ticker-wrap">
-  <div class="ticker">
-    <!-- first copy -->
+  <div class="ticker-inner">
     <div class="tick-item"><span class="tick-sym">CHFJPY</span><span class="tick-pf">PF 52.57</span><span class="tick-dd">DD 13.1%</span></div>
     <div class="tick-item"><span class="tick-sym">EURAUD</span><span class="tick-pf">PF 36.54</span><span class="tick-dd">DD 4.8%</span></div>
     <div class="tick-item"><span class="tick-sym">EURUSD</span><span class="tick-pf">PF 45.81</span><span class="tick-dd">DD 7.7%</span></div>
@@ -680,16 +591,180 @@ footer {
   </div>
 </div>
 
-<!-- RESULTS -->
-<section id="results">
-  <div class="sec-label">Backtest Results — Jan 2025 / Mar 2026 — ICMarkets Raw</div>
+<!-- ═══ EXPERT ADVISORS ═══ -->
+<section id="eas">
+  <div class="sec-label">MQL5 Market · Published Products</div>
+  <div class="sec-title">EXPERT ADVISORS</div>
+  <p class="sec-sub">
+    All EAs are available on MQL5 Market — the world's largest algorithmic trading marketplace.
+    No grid, no martingale. Pure technical strategy with proven edge.
+  </p>
+
+  <div class="eas-grid">
+
+    <!-- 1: Market Trader StBol MT5 -->
+    <div class="ea-card reveal">
+      <div class="prop-tag">✓ Prop Firm Ready</div>
+      <img class="ea-img"
+           src="https://c.mql5.com/31/1132/market-trader-stbol-mt5-logo-200x200-8971.png"
+           alt="Market Trader StBol MT5"
+           onerror="this.style.display='none'">
+      <div class="ea-name">Market Trader StBol MT5</div>
+      <div class="ea-desc">
+        Trades on double stochastic, Bollinger Bands, and trailing stop trawl.
+        Runs simultaneously on 21 standard symbols. Designed for five-digit accounts
+        with 1:500 leverage. H1 timeframe. Backtest period: 2022.05–2024.
+        After purchase you receive a second EA of your choice — free.
+      </div>
+      <div class="ea-tags">
+        <span class="ea-tag green">Stochastic</span>
+        <span class="ea-tag green">Bollinger Bands</span>
+        <span class="ea-tag">21 Symbols</span>
+        <span class="ea-tag">H1</span>
+        <span class="ea-tag">MT5</span>
+      </div>
+      <div class="ea-price-row">
+        <div class="ea-price"><span class="cur">$</span>7,700</div>
+        <div class="ea-price-note">One-time · Lifetime license<br>+Free EA of your choice</div>
+      </div>
+      <a href="https://www.mql5.com/en/market/product/118886" class="btn-mql5" target="_blank">View on MQL5 Market ↗</a>
+    </div>
+
+    <!-- 2: MarketTrader EA MT5 — FEATURED -->
+    <div class="ea-card featured reveal">
+      <div class="ea-badge">Most Popular</div>
+      <div class="prop-tag">✓ Prop Firm Ready</div>
+      <img class="ea-img"
+           src="https://c.mql5.com/31/1401/markettrader-ea-mt5-logo-200x200-6213.png"
+           alt="MarketTrader EA MT5"
+           onerror="this.style.display='none'">
+      <div class="ea-name">MarketTrader EA MT5</div>
+      <div class="ea-desc">
+        Double stochastic on H1/H4 combined with a smart trailing stop.
+        Trades 30 standard symbols simultaneously. No grid or martingale.
+        Best results on ECN/Raw/Razor accounts with very low spreads —
+        IC Markets and Pepperstone recommended. Minimum leverage 1:100; 1:500 preferred.
+      </div>
+      <div class="ea-tags">
+        <span class="ea-tag green">Double Stochastic H1/H4</span>
+        <span class="ea-tag green">30 Symbols</span>
+        <span class="ea-tag">ECN / Raw Spreads</span>
+        <span class="ea-tag">MT5</span>
+      </div>
+      <div class="ea-price-row">
+        <div class="ea-price"><span class="cur">$</span>7,700</div>
+        <div class="ea-price-note">One-time · Lifetime license</div>
+      </div>
+      <a href="https://www.mql5.com/en/market/product/139831" class="btn-mql5 featured-btn" target="_blank">View on MQL5 Market ↗</a>
+    </div>
+
+    <!-- 3: Market Trader AI Pro -->
+    <div class="ea-card reveal">
+      <div class="ea-badge new">AI · Neural Net</div>
+      <div class="prop-tag">✓ Prop Firm Ready</div>
+      <img class="ea-img"
+           src="https://c.mql5.com/31/2078/market-trader-ai-pro-logo-200x200-6731.png"
+           alt="Market Trader AI Pro"
+           onerror="this.style.display='none'">
+      <div class="ea-name">Market Trader AI Pro</div>
+      <div class="ea-desc">
+        Next-generation EA powered by an LSTM neural network for entry signal filtering.
+        Trades 29 standard symbols simultaneously. No grid or martingale.
+        ECN/Raw/Razor accounts required. IC Markets and Pepperstone recommended.
+        Minimum leverage 1:100, 1:500 ideal.
+      </div>
+      <div class="ea-tags">
+        <span class="ea-tag green">LSTM Neural Network</span>
+        <span class="ea-tag green">29 Symbols</span>
+        <span class="ea-tag">ECN / Raw Spreads</span>
+        <span class="ea-tag">MT5</span>
+      </div>
+      <div class="ea-price-row">
+        <div class="ea-price"><span class="cur">$</span>7,700</div>
+        <div class="ea-price-note">One-time · Lifetime license</div>
+      </div>
+      <a href="https://www.mql5.com/en/market/product/155878" class="btn-mql5" target="_blank">View on MQL5 Market ↗</a>
+    </div>
+
+    <!-- 4: BtcUsd Trader AI -->
+    <div class="ea-card reveal">
+      <div class="ea-badge new">Crypto · BTC</div>
+      <div class="prop-tag">✓ Prop Firm Ready</div>
+      <img class="ea-img"
+           src="https://c.mql5.com/31/1837/btcusd-trader-ai-logo-200x200-2127.png"
+           alt="BtcUsd Trader AI"
+           onerror="this.style.display='none'">
+      <div class="ea-name">BtcUsd Trader AI</div>
+      <div class="ea-desc">
+        AI-driven EA specialized for Bitcoin/USD trading on MT5.
+        After purchase you receive setup instructions plus a second EA of your choice —
+        Market Trader AI Pro, MarketTrader EA MT5, or Market Trader StBol MT5 — absolutely free.
+        Price limited to next 3 copies at $7,700; will rise permanently to $11,500.
+      </div>
+      <div class="ea-tags">
+        <span class="ea-tag green">AI Signals</span>
+        <span class="ea-tag green">BTCUSD</span>
+        <span class="ea-tag">Limited Copies</span>
+        <span class="ea-tag">MT5</span>
+      </div>
+      <div class="ea-price-row">
+        <div class="ea-price"><span class="cur">$</span>7,700</div>
+        <div class="ea-price-note">Next 3 copies only<br><strong>↑ $11,500 after</strong></div>
+      </div>
+      <a href="https://www.mql5.com/en/market/product/167121" class="btn-mql5" target="_blank">View on MQL5 Market ↗</a>
+    </div>
+
+  </div><!-- /eas-grid -->
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section id="features">
+  <div class="sec-label">Strategy DNA</div>
+  <div class="sec-title">WHAT SETS THESE EAS APART</div>
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <span class="feat-icon">⛔</span>
+      <div class="feat-title">No Martingale / No Grid</div>
+      <div class="feat-text">Pure signal-based entries. Position sizing stays fixed. No compounding risk traps that blow accounts.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🏆</span>
+      <div class="feat-title">Prop Firm Ready</div>
+      <div class="feat-text">All EAs comply with standard prop firm rules — drawdown limits respected, no forbidden strategies.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🧠</span>
+      <div class="feat-title">AI Neural Network</div>
+      <div class="feat-text">Market Trader AI Pro uses LSTM deep learning to filter entries — fewer trades, higher precision.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Multi-Pair Execution</div>
+      <div class="feat-text">Run 21–30 symbols from a single EA instance. Diversified exposure across correlated pairs reduces volatility.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🔬</span>
+      <div class="feat-title">Optimized Per Symbol</div>
+      <div class="feat-text">Each currency pair carries its own tuned parameter set — no one-size-fits-all approach.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title">Low-Spread Optimized</div>
+      <div class="feat-text">Designed for ECN / Raw / Razor accounts on IC Markets and Pepperstone. Spread costs accounted for in all backtests.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RESULTS ═══ -->
+<section id="results" style="background:var(--bg3)">
+  <div class="sec-label">Backtest Results · Jan 2025 / Mar 2026 · ICMarkets Raw</div>
   <div class="sec-title">VERIFIED PERFORMANCE</div>
-  <p style="color:var(--muted);font-size:0.9rem;max-width:600px;line-height:1.7">
-    Strategy Tester results on ICMarkets SC-Demo. Deposit $1000, leverage 1:100.
+  <p class="sec-sub">
+    Strategy Tester results on ICMarkets SC-Demo. Deposit $1,000, leverage 1:100.
     H1 timeframe. Open prices only modelling. Per-symbol optimized parameters.
   </p>
 
-  <div class="results-grid">
+  <div class="results-grid reveal">
     <div class="result-card">
       <div class="rc-pair">CHFJPY</div>
       <div class="rc-row"><span class="rc-key">PROFIT</span><span class="rc-val green">+$407</span></div>
@@ -741,131 +816,133 @@ footer {
   </div>
 
   <div class="warning-bar">
-    ⚠ RISK DISCLOSURE — Trading forex involves significant risk of loss. Past performance does not guarantee future results.
-    Backtest results are simulated and may not reflect live trading conditions. Trade responsibly.
+    ⚠ RISK DISCLOSURE — Trading forex and crypto involves significant risk of loss and is not suitable for all investors.
+    Past performance and backtest results do not guarantee future results. Backtest figures are simulated
+    and may not reflect live trading conditions. Trade responsibly.
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section id="products" class="products">
-  <div class="sec-label">Pricing</div>
-  <div class="sec-title">GET MARKETTRADER EA</div>
-  <p style="color:var(--muted);font-size:0.9rem;line-height:1.7">
-    Purchase via Telegram bot. Instant delivery after crypto payment. No MQL5 middleman.
-  </p>
-
-  <div class="products-grid">
-
-    <div class="prod-card">
-      <div class="prod-name">EA v1.0</div>
-      <div class="prod-desc">Single-pair version. Full source code in MQL5. Works on MT5. Ideal for learning the strategy.</div>
-      <ul class="prod-features">
-        <li>MarketTrader-EAv1.0.ex5 compiled</li>
-        <li>MarketTrader-EAv1.0.mq5 source</li>
-        <li>Setup guide PDF</li>
-        <li>1 currency pair config</li>
-      </ul>
-      <div class="prod-price">$<span style="font-size:3rem">99</span></div>
-      <div class="prod-period">One-time payment · Lifetime use</div>
-      <a href="https://t.me/markettraderopt_bot?start=buy_ea_single" class="btn-buy" target="_blank">Buy via Telegram</a>
-    </div>
-
-    <div class="prod-card featured">
-      <div class="prod-badge">Most Popular</div>
-      <div class="prod-name">EA v1.0 Full</div>
-      <div class="prod-desc">All 29 currency pairs with pre-optimized configs. Ready to run on any MT5 account.</div>
-      <ul class="prod-features">
-        <li>All 29 pairs optimized configs</li>
-        <li>Full MQL5 source code</li>
-        <li>Backtest reports included</li>
-        <li>Setup guide + video walkthrough</li>
-        <li>3 months Telegram support</li>
-      </ul>
-      <div class="prod-price">$<span style="font-size:3rem">299</span></div>
-      <div class="prod-period">One-time payment · Lifetime use</div>
-      <a href="https://t.me/markettraderopt_bot?start=buy_ea_full" class="btn-buy featured-btn" target="_blank">Buy via Telegram</a>
-    </div>
-
-    <div class="prod-card">
-      <div class="prod-name">EA + AI Version</div>
-      <div class="prod-desc">MarketTrader-AI_EA — next generation with ML-enhanced signal filtering. Experimental.</div>
-      <ul class="prod-features">
-        <li>AI-enhanced entry signals</li>
-        <li>Multi-timeframe analysis</li>
-        <li>Full source MQL5</li>
-        <li>6 months priority support</li>
-        <li>Free updates for 1 year</li>
-      </ul>
-      <div class="prod-price">$<span style="font-size:3rem">599</span></div>
-      <div class="prod-period">One-time payment · Lifetime use</div>
-      <a href="https://t.me/markettraderopt_bot?start=buy_ea_ai" class="btn-buy" target="_blank">Buy via Telegram</a>
-    </div>
-
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
+<!-- ═══ HOW IT WORKS ═══ -->
 <section id="how">
   <div class="sec-label">Process</div>
-  <div class="sec-title">HOW IT WORKS</div>
-
+  <div class="sec-title">HOW TO GET STARTED</div>
   <div class="steps">
-    <div class="step">
+    <div class="step reveal">
       <div class="step-num">01</div>
-      <div class="step-title">Open Telegram Bot</div>
-      <div class="step-text">Click any "Buy" button. Our Telegram bot handles the entire purchase flow — no account needed.</div>
+      <div class="step-title">Choose Your EA</div>
+      <div class="step-text">Browse the four published EAs on MQL5 Market. Each listing contains full descriptions, screenshots, and backtest reports.</div>
     </div>
-    <div class="step">
+    <div class="step reveal">
       <div class="step-num">02</div>
-      <div class="step-title">Pay with Crypto</div>
-      <div class="step-text">BTC, ETH, USDT accepted via NowPayments. Secure checkout. Instant confirmation.</div>
+      <div class="step-title">Purchase on MQL5</div>
+      <div class="step-text">Buy directly through MQL5 Market — secure payment, buyer protection, instant license activation. Cards &amp; crypto accepted.</div>
     </div>
-    <div class="step">
+    <div class="step reveal">
       <div class="step-num">03</div>
-      <div class="step-title">Instant Delivery</div>
-      <div class="step-text">Files delivered directly to your Telegram chat within seconds of payment confirmation.</div>
+      <div class="step-title">Receive Setup Guide</div>
+      <div class="step-text">Message Bogdan after purchase. You'll receive installation instructions, broker recommendations, and optimized parameter sets.</div>
     </div>
-    <div class="step">
+    <div class="step reveal">
       <div class="step-num">04</div>
-      <div class="step-title">Install & Run</div>
-      <div class="step-text">Drop the .ex5 into MT5 Experts folder. Set inputs per the guide. Attach to chart. Done.</div>
+      <div class="step-title">Attach &amp; Run</div>
+      <div class="step-text">Copy the .ex5 file to your MT5 Experts folder, configure inputs per the guide, attach to chart, and activate AutoTrading. Done.</div>
     </div>
   </div>
 
-  <div style="margin-top:48px">
-    <div class="sec-label">Accepted Payments</div>
+  <div style="margin-top:56px" class="reveal">
+    <div class="sec-label">Recommended Brokers</div>
     <div class="crypto-row">
-      <div class="crypto-badge">₿ <span>Bitcoin</span></div>
-      <div class="crypto-badge">Ξ <span>Ethereum</span></div>
-      <div class="crypto-badge">₮ <span>USDT TRC20</span></div>
-      <div class="crypto-badge">◎ <span>USDT ERC20</span></div>
-      <div class="crypto-badge">◈ <span>LTC</span></div>
+      <div class="crypto-badge">🏦 <span>IC Markets — Raw Spread</span></div>
+      <div class="crypto-badge">🏦 <span>Pepperstone — Razor</span></div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact" style="background:var(--bg2)">
-  <div class="sec-label">Support</div>
-  <div class="sec-title">CONTACT</div>
-  <p style="color:var(--muted);font-size:0.9rem;line-height:1.7;max-width:500px;margin-bottom:32px">
-    13+ years developing algorithmic trading systems. Questions about setup, strategy, or custom work — reach out directly.
-  </p>
-  <div style="display:flex;gap:16px;flex-wrap:wrap">
+<!-- ═══ TELEGRAM CTA BAND ═══ -->
+<div class="tg-band">
+  <div class="tg-band-text">
+    <h2>QUESTIONS? REACH OUT DIRECTLY</h2>
+    <p>13+ years building algorithmic trading systems. Setup help, custom work, or strategy questions — talk to Bogdan directly.</p>
+  </div>
+  <div class="tg-band-btns">
     <a href="https://t.me/bogdansuvorov" class="btn-primary" target="_blank">Telegram @bogdansuvorov</a>
-    <a href="https://markettrader.mooo.com" class="btn-secondary" target="_blank">MQL5 Profile</a>
+    <a href="https://www.mql5.com/en/users/bogdasha1/seller" class="btn-secondary" target="_blank">MQL5 Profile</a>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="sec-label">Contact &amp; Support</div>
+  <div class="sec-title">GET IN TOUCH</div>
+
+  <div class="contact-grid">
+    <div class="contact-block reveal">
+      <div class="contact-label">Telegram</div>
+      <div class="contact-val"><a href="https://t.me/bogdansuvorov" target="_blank">@bogdansuvorov</a></div>
+      <div class="contact-desc">Primary support channel. Fastest response. Setup help, license questions, and custom EA requests.</div>
+    </div>
+    <div class="contact-block reveal">
+      <div class="contact-label">MQL5 Market Store</div>
+      <div class="contact-val"><a href="https://www.mql5.com/en/users/bogdasha1/seller" target="_blank">bogdasha1</a></div>
+      <div class="contact-desc">All four EAs are available directly on MQL5 Market with full listing details, screenshots, and buyer protection.</div>
+    </div>
+    <div class="contact-block reveal">
+      <div class="contact-label">Experience</div>
+      <div class="contact-val" style="color:var(--text)">13+ Years</div>
+      <div class="contact-desc">Developing algorithmic trading systems since 2011. Specialized in stochastic strategies and AI-enhanced signal filtering.</div>
+    </div>
+    <div class="contact-block reveal">
+      <div class="contact-label">After Purchase</div>
+      <div class="contact-val" style="color:var(--text)">Free Bonus EA</div>
+      <div class="contact-desc">Purchase Market Trader StBol MT5 or BtcUsd Trader AI and receive a second EA of your choice — absolutely free.</div>
+    </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-logo">MarketTrader EA</div>
+  <div class="footer-logo">MarketTrader</div>
   <div class="footer-links">
+    <a href="#eas">EAs</a>
     <a href="#results">Results</a>
-    <a href="#products">Products</a>
-    <a href="#how">How it works</a>
+    <a href="#how">How it Works</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.mql5.com/en/users/bogdasha1/seller" target="_blank">MQL5 Store ↗</a>
   </div>
-  <div class="footer-copy">© 2011–2025 Bogdan Suvorov · Ukraine</div>
+  <div class="footer-copy">© 2011–2026 Bohdan Suvorov · Ukraine</div>
 </footer>
 
+<script>
+// ─── Scroll Reveal ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.12, rootMargin: '0px 0px -40px 0px'});
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── Nav scroll shrink ───
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.style.padding = window.scrollY > 60 ? '12px 56px' : '18px 56px';
+});
+
+// ─── Active nav link highlight ───
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if(window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current
+      ? 'var(--green)' : '';
+  });
+}, {passive: true});
+</script>
 </body>
 </html>
